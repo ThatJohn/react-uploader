@@ -25,6 +25,30 @@ export default class App extends Component {
     this.setState({ [event.target.name]: event.target.value });
   }
 
+  handleSubmit = async event => {
+    event.preventDefault();
+    const formData = new FormData();
+    formData.append('title', this.state.title);
+    formData.append('body', this.state.body);
+    formData.append('featured_image', this.state.featured_image);
+
+    await fetch('http://localhost:3000/new', {
+      method: 'POST',
+      body: formData
+    })
+    .catch(error=>console.log(error));
+    this.setState({
+      title: '',
+      body: '',
+      featured_image: null
+    });
+    this.getPosts();
+  }
+
+  onImageChange = event => { 
+    this.setState({ featured_image: event.target.files[0] }); 
+  }; 
+
   render() {
     return (
       <div className="container">
